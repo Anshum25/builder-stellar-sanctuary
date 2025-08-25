@@ -125,7 +125,7 @@ const Results: React.FC = () => {
       </Card>
 
       {/* Quiz Details */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardContent className="p-6 text-center">
             <GraduationCap className="w-8 h-8 text-indigo-600 mx-auto mb-3" />
@@ -139,6 +139,18 @@ const Results: React.FC = () => {
             <Book className="w-8 h-8 text-purple-600 mx-auto mb-3" />
             <h3 className="font-semibold text-gray-900">Subject</h3>
             <p className="text-gray-600">{result.subject}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6 text-center">
+            <Target className="w-8 h-8 text-orange-600 mx-auto mb-3" />
+            <h3 className="font-semibold text-gray-900">Difficulty</h3>
+            <p className={`font-medium ${
+              result.difficulty === 'Easy' ? 'text-green-600' :
+              result.difficulty === 'Medium' ? 'text-yellow-600' :
+              'text-red-600'
+            }`}>{result.difficulty}</p>
           </CardContent>
         </Card>
 
