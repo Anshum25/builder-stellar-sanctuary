@@ -162,10 +162,17 @@ const Dashboard: React.FC = () => {
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-medium text-gray-900">{quiz.subject}</h3>
                       <Badge variant="secondary" className="text-xs">
                         {quiz.standard}
+                      </Badge>
+                      <Badge className={`text-xs ${
+                        quiz.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+                        quiz.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {quiz.difficulty}
                       </Badge>
                     </div>
                     <p className="text-sm text-gray-600">
