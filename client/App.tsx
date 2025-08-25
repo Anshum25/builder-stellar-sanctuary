@@ -23,88 +23,93 @@ import LoadingSpinner from "./components/LoadingSpinner";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+// Protected Route Components - Now defined inside the AuthProvider context
+const AppContent = () => {
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { user, loading } = useAuth();
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+    if (loading) {
+      return <LoadingSpinner />;
+    }
 
-  return user ? <>{children}</> : <Navigate to="/login" />;
+    return user ? <>{children}</> : <Navigate to="/login" />;
+  };
+
+  const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) {
+      return <LoadingSpinner />;
+    }
+
+    return !user ? <>{children}</> : <Navigate to="/dashboard" />;
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/select-quiz"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SelectQuiz />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Quiz />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/results/:resultId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Results />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
-
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  return !user ? <>{children}</> : <Navigate to="/dashboard" />;
-};
-
-const AppRoutes = () => (
-  <Routes>
-    <Route
-      path="/login"
-      element={
-        <PublicRoute>
-          <Login />
-        </PublicRoute>
-      }
-    />
-    <Route
-      path="/signup"
-      element={
-        <PublicRoute>
-          <Signup />
-        </PublicRoute>
-      }
-    />
-    <Route
-      path="/dashboard"
-      element={
-        <ProtectedRoute>
-          <Layout>
-            <Dashboard />
-          </Layout>
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/select-quiz"
-      element={
-        <ProtectedRoute>
-          <Layout>
-            <SelectQuiz />
-          </Layout>
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/quiz"
-      element={
-        <ProtectedRoute>
-          <Layout>
-            <Quiz />
-          </Layout>
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/results/:resultId"
-      element={
-        <ProtectedRoute>
-          <Layout>
-            <Results />
-          </Layout>
-        </ProtectedRoute>
-      }
-    />
-    <Route path="/" element={<Navigate to="/dashboard" />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -112,9 +117,7 @@ const App = () => (
       <AuthProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <AppContent />
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
