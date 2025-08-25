@@ -42,7 +42,7 @@ const Quiz: React.FC = () => {
 
   // Load questions on mount
   useEffect(() => {
-    if (quizState?.standard && quizState?.subject) {
+    if (quizState?.standard && quizState?.subject && quizState?.difficulty) {
       loadQuestions();
     }
   }, [quizState]);
