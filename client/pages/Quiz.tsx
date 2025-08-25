@@ -184,7 +184,7 @@ const Quiz: React.FC = () => {
     }
   };
 
-  if (!quizState?.standard || !quizState?.subject) {
+  if (!quizState?.standard || !quizState?.subject || !quizState?.difficulty) {
     return null;
   }
 
