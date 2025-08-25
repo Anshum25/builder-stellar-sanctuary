@@ -220,6 +220,11 @@ const Quiz: React.FC = () => {
           <Brain className="w-6 h-6 text-indigo-600" />
           <Badge variant="secondary">{quizState.standard}</Badge>
           <Badge variant="secondary">{quizState.subject}</Badge>
+          <Badge className={`${
+            quizState.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+            quizState.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+            'bg-red-100 text-red-800'
+          }`}>{quizState.difficulty}</Badge>
         </div>
         <h1 className="text-2xl font-bold text-gray-900">
           Question {currentQuestionIndex + 1} of {questions.length}
