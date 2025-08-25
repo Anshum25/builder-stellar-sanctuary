@@ -34,7 +34,7 @@ const Quiz: React.FC = () => {
 
   // Redirect if no quiz state
   useEffect(() => {
-    if (!quizState?.standard || !quizState?.subject) {
+    if (!quizState?.standard || !quizState?.subject || !quizState?.difficulty) {
       navigate('/select-quiz');
       return;
     }
