@@ -3,22 +3,24 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Brain, BookOpen, GraduationCap, ArrowRight, Sparkles } from 'lucide-react';
+import { Brain, BookOpen, GraduationCap, ArrowRight, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { STANDARDS, SUBJECTS } from '@shared/types';
+import { STANDARDS, SUBJECTS, DIFFICULTY_LEVELS } from '@shared/types';
 
 const SelectQuiz: React.FC = () => {
   const [selectedStandard, setSelectedStandard] = useState<string>('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
   const navigate = useNavigate();
 
   const handleStartQuiz = () => {
-    if (selectedStandard && selectedSubject) {
+    if (selectedStandard && selectedSubject && selectedDifficulty) {
       // Navigate to quiz with selected parameters
       navigate('/quiz', { 
         state: { 
           standard: selectedStandard, 
-          subject: selectedSubject 
+          subject: selectedSubject,
+          difficulty: selectedDifficulty
         } 
       });
     }
@@ -45,18 +47,36 @@ const SelectQuiz: React.FC = () => {
     return { color: 'bg-purple-100 text-purple-800', label: 'High School' };
   };
 
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'Easy': return 'bg-green-100 text-green-800';
+      case 'Medium': return 'bg-yellow-100 text-yellow-800';
+      case 'Hard': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getDifficultyDescription = (difficulty: string) => {
+    switch (difficulty) {
+      case 'Easy': return 'Basic concepts and fundamental understanding';
+      case 'Medium': return 'Intermediate concepts with some complexity';
+      case 'Hard': return 'Advanced concepts and challenging problems';
+      default: return '';
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
           <Sparkles className="w-8 h-8 text-indigo-600" />
           Select Your Quiz
         </h1>
-        <p className="text-gray-600">Choose your grade level and subject to get started</p>
+        <p className="text-gray-600">Choose your grade level, subject, and difficulty to get started</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-3 gap-6">
         {/* Standard Selection */}
         <Card className="border-2 border-gray-200 hover:border-indigo-300 transition-colors">
           <CardHeader>
@@ -143,10 +163,52 @@ const SelectQuiz: React.FC = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Difficulty Selection */}
+        <Card className="border-2 border-gray-200 hover:border-orange-300 transition-colors">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-orange-600" />
+              Select Difficulty
+            </CardTitle>
+            <CardDescription>
+              Choose your challenge level
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+              <SelectTrigger className="h-12 text-left">
+                <SelectValue placeholder="Choose difficulty level" />
+              </SelectTrigger>
+              <SelectContent>
+                {DIFFICULTY_LEVELS.map((difficulty) => (
+                  <SelectItem key={difficulty} value={difficulty}>
+                    <div className="flex items-center gap-2">
+                      <Badge className={getDifficultyColor(difficulty)}>
+                        {difficulty}
+                      </Badge>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {selectedDifficulty && (
+              <div className="mt-4 p-3 bg-orange-50 rounded-lg">
+                <p className="text-sm text-orange-700">
+                  <strong>Selected:</strong> {selectedDifficulty}
+                </p>
+                <p className="text-xs text-orange-600 mt-1">
+                  {getDifficultyDescription(selectedDifficulty)}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Quiz Preview */}
-      {selectedStandard && selectedSubject && (
+      {selectedStandard && selectedSubject && selectedDifficulty && (
         <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200">
           <CardContent className="p-6">
             <div className="text-center">
@@ -154,8 +216,15 @@ const SelectQuiz: React.FC = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Ready to Start!
               </h3>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Badge variant="secondary">{selectedStandard}</Badge>
+                <Badge variant="secondary">{selectedSubject}</Badge>
+                <Badge className={getDifficultyColor(selectedDifficulty)}>
+                  {selectedDifficulty}
+                </Badge>
+              </div>
               <p className="text-gray-600 mb-4">
-                You'll get 5 multiple-choice questions about <strong>{selectedSubject}</strong> at <strong>{selectedStandard}</strong> level
+                You'll get 5 multiple-choice questions about <strong>{selectedSubject}</strong> at <strong>{selectedStandard}</strong> level with <strong>{selectedDifficulty.toLowerCase()}</strong> difficulty
               </p>
               <div className="flex items-center justify-center gap-4 text-sm text-gray-500 mb-6">
                 <div className="flex items-center gap-1">
@@ -187,29 +256,29 @@ const SelectQuiz: React.FC = () => {
       {/* Quiz Tips */}
       <Card className="bg-gray-50 border-gray-200">
         <CardHeader>
-          <CardTitle className="text-lg">Quiz Tips 💡</CardTitle>
+          <CardTitle className="text-lg">Difficulty Guide 💡</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-start gap-2">
-              <span className="text-green-600">✅</span>
+              <Badge className="bg-green-100 text-green-800 mt-1">Easy</Badge>
               <div>
-                <p className="font-medium">Read Carefully</p>
-                <p className="text-gray-600">Take your time to understand each question</p>
+                <p className="font-medium">Foundation Level</p>
+                <p className="text-gray-600">Basic concepts and straightforward questions</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-blue-600">💡</span>
+              <Badge className="bg-yellow-100 text-yellow-800 mt-1">Medium</Badge>
               <div>
-                <p className="font-medium">Learn from Feedback</p>
-                <p className="text-gray-600">AI explanations help you understand concepts</p>
+                <p className="font-medium">Intermediate Level</p>
+                <p className="text-gray-600">Applied knowledge and moderate complexity</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-purple-600">🎯</span>
+              <Badge className="bg-red-100 text-red-800 mt-1">Hard</Badge>
               <div>
-                <p className="font-medium">Practice Regularly</p>
-                <p className="text-gray-600">Regular quizzes improve knowledge retention</p>
+                <p className="font-medium">Advanced Level</p>
+                <p className="text-gray-600">Complex problems and critical thinking</p>
               </div>
             </div>
           </div>
