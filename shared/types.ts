@@ -3,11 +3,13 @@ export interface MCQuestion {
   options: string[];
   answer: number; // index of correct option
   explanation?: string;
+  difficulty?: string;
 }
 
 export interface QuizRequest {
   standard: string;
   subject: string;
+  difficulty: string;
   questionCount?: number;
 }
 
@@ -26,6 +28,7 @@ export interface QuizResult {
   userId: string;
   standard: string;
   subject: string;
+  difficulty: string;
   score: number;
   total: number;
   date: string;
@@ -38,6 +41,7 @@ export interface FeedbackRequest {
   correctAnswer: string;
   standard: string;
   subject: string;
+  difficulty: string;
 }
 
 export interface FeedbackResponse {
@@ -63,4 +67,10 @@ export const SUBJECTS = [
   'Physics',
   'Chemistry',
   'Biology'
+];
+
+export const DIFFICULTY_LEVELS = [
+  'Easy',
+  'Medium',
+  'Hard'
 ];
