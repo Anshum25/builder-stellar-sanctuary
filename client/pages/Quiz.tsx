@@ -127,7 +127,8 @@ const Quiz: React.FC = () => {
           userAnswer: currentQuestion.options[selectedAnswer],
           correctAnswer: currentQuestion.options[currentQuestion.answer],
           standard: quizState.standard,
-          subject: quizState.subject
+          subject: quizState.subject,
+          difficulty: quizState.difficulty
         }),
       });
 
