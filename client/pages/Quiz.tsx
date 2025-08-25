@@ -13,6 +13,7 @@ import { MCQuestion, QuizSubmission } from '@shared/types';
 interface QuizState {
   standard: string;
   subject: string;
+  difficulty: string;
 }
 
 const Quiz: React.FC = () => {
