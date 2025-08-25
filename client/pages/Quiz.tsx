@@ -170,6 +170,7 @@ const Quiz: React.FC = () => {
         userId: user?.uid || '',
         standard: quizState.standard,
         subject: quizState.subject,
+        difficulty: quizState.difficulty,
         score,
         total: questions.length,
         date: new Date().toISOString(),
