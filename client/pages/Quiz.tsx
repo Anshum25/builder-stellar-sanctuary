@@ -60,6 +60,7 @@ const Quiz: React.FC = () => {
         body: JSON.stringify({
           standard: quizState.standard,
           subject: quizState.subject,
+          difficulty: quizState.difficulty,
           questionCount: 5
         }),
       });
