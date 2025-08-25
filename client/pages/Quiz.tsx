@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
-import { Brain, CheckCircle, XCircle, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { MCQuestion, QuizSubmission } from '@shared/types';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import {
+  Brain,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
+  ArrowLeft,
+  Loader2,
+} from "lucide-react";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { MCQuestion, QuizSubmission } from "@shared/types";
 
 interface QuizState {
   standard: string;
@@ -20,22 +33,22 @@ const Quiz: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const [quizState] = useState<QuizState>(location.state as QuizState);
   const [questions, setQuestions] = useState<MCQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [submissions, setSubmissions] = useState<QuizSubmission[]>([]);
-  const [feedback, setFeedback] = useState<string>('');
+  const [feedback, setFeedback] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   // Redirect if no quiz state
   useEffect(() => {
     if (!quizState?.standard || !quizState?.subject || !quizState?.difficulty) {
-      navigate('/select-quiz');
+      navigate("/select-quiz");
       return;
     }
   }, [quizState, navigate]);
@@ -49,32 +62,32 @@ const Quiz: React.FC = () => {
 
   const loadQuestions = async () => {
     setLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
-      const response = await fetch('/api/quiz/generate', {
-        method: 'POST',
+      const response = await fetch("/api/quiz/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           standard: quizState.standard,
           subject: quizState.subject,
           difficulty: quizState.difficulty,
-          questionCount: 5
+          questionCount: 5,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to load questions');
+        throw new Error("Failed to load questions");
       }
 
       const data = await response.json();
       setQuestions(data.questions);
     } catch (err) {
-      setError('Failed to load quiz questions. Please try again.');
-      console.error('Error loading questions:', err);
-      
+      setError("Failed to load quiz questions. Please try again.");
+      console.error("Error loading questions:", err);
+
       // Fallback to mock questions for development
       setQuestions([
         {
@@ -86,7 +99,7 @@ const Quiz: React.FC = () => {
           question: "What is the capital of France?",
           options: ["London", "Berlin", "Paris", "Madrid"],
           answer: 2,
-        }
+        },
       ]);
     } finally {
       setLoading(false);
@@ -106,21 +119,21 @@ const Quiz: React.FC = () => {
 
     const currentQuestion = questions[currentQuestionIndex];
     const isCorrect = selectedAnswer === currentQuestion.answer;
-    
+
     const submission: QuizSubmission = {
       questionIndex: currentQuestionIndex,
       selectedAnswer,
-      isCorrect
+      isCorrect,
     };
 
-    setSubmissions(prev => [...prev, submission]);
+    setSubmissions((prev) => [...prev, submission]);
 
     // Get AI feedback
     try {
-      const response = await fetch('/api/quiz/feedback', {
-        method: 'POST',
+      const response = await fetch("/api/quiz/feedback", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           question: currentQuestion.question,
@@ -128,7 +141,7 @@ const Quiz: React.FC = () => {
           correctAnswer: currentQuestion.options[currentQuestion.answer],
           standard: quizState.standard,
           subject: quizState.subject,
-          difficulty: quizState.difficulty
+          difficulty: quizState.difficulty,
         }),
       });
 
@@ -137,16 +150,18 @@ const Quiz: React.FC = () => {
         setFeedback(data.feedback);
       } else {
         // Fallback feedback
-        setFeedback(isCorrect 
-          ? "Great job! You got it right! 🎉" 
-          : `That's not quite right. The correct answer is: ${currentQuestion.options[currentQuestion.answer]}`
+        setFeedback(
+          isCorrect
+            ? "Great job! You got it right! 🎉"
+            : `That's not quite right. The correct answer is: ${currentQuestion.options[currentQuestion.answer]}`,
         );
       }
     } catch (err) {
       // Fallback feedback
-      setFeedback(isCorrect 
-        ? "Great job! You got it right! 🎉" 
-        : `That's not quite right. The correct answer is: ${currentQuestion.options[currentQuestion.answer]}`
+      setFeedback(
+        isCorrect
+          ? "Great job! You got it right! 🎉"
+          : `That's not quite right. The correct answer is: ${currentQuestion.options[currentQuestion.answer]}`,
       );
     } finally {
       setLoadingFeedback(false);
@@ -155,31 +170,37 @@ const Quiz: React.FC = () => {
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
-      setFeedback('');
+      setFeedback("");
     } else {
       // Quiz finished, navigate to results
-      const score = submissions.reduce((acc, sub) => acc + (sub.isCorrect ? 1 : 0), 0);
+      const score = submissions.reduce(
+        (acc, sub) => acc + (sub.isCorrect ? 1 : 0),
+        0,
+      );
       const resultId = `result_${Date.now()}`;
-      
+
       // In a real app, save to database here
       const quizResult = {
         id: resultId,
-        userId: user?.uid || '',
+        userId: user?.uid || "",
         standard: quizState.standard,
         subject: quizState.subject,
         difficulty: quizState.difficulty,
         score,
         total: questions.length,
         date: new Date().toISOString(),
-        submissions
+        submissions,
       };
-      
+
       // Store in localStorage for now (replace with API call)
-      localStorage.setItem(`quiz_result_${resultId}`, JSON.stringify(quizResult));
-      
+      localStorage.setItem(
+        `quiz_result_${resultId}`,
+        JSON.stringify(quizResult),
+      );
+
       navigate(`/results/${resultId}`);
     }
   };
@@ -200,7 +221,7 @@ const Quiz: React.FC = () => {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
         <div className="mt-4 text-center">
-          <Button onClick={() => navigate('/select-quiz')}>
+          <Button onClick={() => navigate("/select-quiz")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Quiz Selection
           </Button>
@@ -221,11 +242,17 @@ const Quiz: React.FC = () => {
           <Brain className="w-6 h-6 text-indigo-600" />
           <Badge variant="secondary">{quizState.standard}</Badge>
           <Badge variant="secondary">{quizState.subject}</Badge>
-          <Badge className={`${
-            quizState.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-            quizState.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-red-100 text-red-800'
-          }`}>{quizState.difficulty}</Badge>
+          <Badge
+            className={`${
+              quizState.difficulty === "Easy"
+                ? "bg-green-100 text-green-800"
+                : quizState.difficulty === "Medium"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-red-100 text-red-800"
+            }`}
+          >
+            {quizState.difficulty}
+          </Badge>
         </div>
         <h1 className="text-2xl font-bold text-gray-900">
           Question {currentQuestionIndex + 1} of {questions.length}
@@ -249,19 +276,24 @@ const Quiz: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-3">
           {currentQuestion.options.map((option, index) => {
-            let buttonClasses = "w-full text-left p-4 rounded-lg border-2 transition-all hover:border-indigo-300";
-            
+            let buttonClasses =
+              "w-full text-left p-4 rounded-lg border-2 transition-all hover:border-indigo-300";
+
             if (isAnswered) {
               if (index === currentQuestion.answer) {
                 buttonClasses += " bg-green-50 border-green-500 text-green-800";
-              } else if (index === selectedAnswer && selectedAnswer !== currentQuestion.answer) {
+              } else if (
+                index === selectedAnswer &&
+                selectedAnswer !== currentQuestion.answer
+              ) {
                 buttonClasses += " bg-red-50 border-red-500 text-red-800";
               } else {
                 buttonClasses += " bg-gray-50 border-gray-300 text-gray-600";
               }
             } else {
               if (selectedAnswer === index) {
-                buttonClasses += " bg-indigo-50 border-indigo-500 text-indigo-800";
+                buttonClasses +=
+                  " bg-indigo-50 border-indigo-500 text-indigo-800";
               } else {
                 buttonClasses += " border-gray-300 hover:bg-indigo-50";
               }
@@ -279,9 +311,11 @@ const Quiz: React.FC = () => {
                   {isAnswered && index === currentQuestion.answer && (
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   )}
-                  {isAnswered && index === selectedAnswer && selectedAnswer !== currentQuestion.answer && (
-                    <XCircle className="w-5 h-5 text-red-600" />
-                  )}
+                  {isAnswered &&
+                    index === selectedAnswer &&
+                    selectedAnswer !== currentQuestion.answer && (
+                      <XCircle className="w-5 h-5 text-red-600" />
+                    )}
                 </div>
               </button>
             );
@@ -292,7 +326,7 @@ const Quiz: React.FC = () => {
       {/* Submit Button */}
       {!isAnswered && (
         <div className="text-center">
-          <Button 
+          <Button
             onClick={handleSubmitAnswer}
             disabled={selectedAnswer === null}
             size="lg"
@@ -305,7 +339,9 @@ const Quiz: React.FC = () => {
 
       {/* Feedback */}
       {isAnswered && (
-        <Card className={`border-2 ${submissions[submissions.length - 1]?.isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
+        <Card
+          className={`border-2 ${submissions[submissions.length - 1]?.isCorrect ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+        >
           <CardContent className="p-6">
             {loadingFeedback ? (
               <div className="flex items-center justify-center py-4">
@@ -322,18 +358,20 @@ const Quiz: React.FC = () => {
                   )}
                   <div>
                     <h3 className="font-semibold mb-2">
-                      {submissions[submissions.length - 1]?.isCorrect ? 'Correct!' : 'Not quite right'}
+                      {submissions[submissions.length - 1]?.isCorrect
+                        ? "Correct!"
+                        : "Not quite right"}
                     </h3>
                     <p className="text-gray-700">{feedback}</p>
                   </div>
                 </div>
                 <div className="text-center">
-                  <Button 
+                  <Button
                     onClick={handleNextQuestion}
                     size="lg"
                     className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
                   >
-                    {isLastQuestion ? 'View Results' : 'Next Question'}
+                    {isLastQuestion ? "View Results" : "Next Question"}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>

@@ -1,67 +1,96 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Brain, BookOpen, GraduationCap, ArrowRight, Sparkles, Target } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { STANDARDS, SUBJECTS, DIFFICULTY_LEVELS } from '@shared/types';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Brain,
+  BookOpen,
+  GraduationCap,
+  ArrowRight,
+  Sparkles,
+  Target,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { STANDARDS, SUBJECTS, DIFFICULTY_LEVELS } from "@shared/types";
 
 const SelectQuiz: React.FC = () => {
-  const [selectedStandard, setSelectedStandard] = useState<string>('');
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
+  const [selectedStandard, setSelectedStandard] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
   const navigate = useNavigate();
 
   const handleStartQuiz = () => {
     if (selectedStandard && selectedSubject && selectedDifficulty) {
       // Navigate to quiz with selected parameters
-      navigate('/quiz', { 
-        state: { 
-          standard: selectedStandard, 
+      navigate("/quiz", {
+        state: {
+          standard: selectedStandard,
           subject: selectedSubject,
-          difficulty: selectedDifficulty
-        } 
+          difficulty: selectedDifficulty,
+        },
       });
     }
   };
 
   const getSubjectIcon = (subject: string) => {
     const icons: { [key: string]: string } = {
-      'Mathematics': '🔢',
-      'Science': '🔬',
-      'English': '📚',
-      'History': '🏛️',
-      'Geography': '🌍',
-      'Physics': '⚡',
-      'Chemistry': '🧪',
-      'Biology': '🧬'
+      Mathematics: "🔢",
+      Science: "🔬",
+      English: "📚",
+      History: "🏛️",
+      Geography: "🌍",
+      Physics: "⚡",
+      Chemistry: "🧪",
+      Biology: "🧬",
     };
-    return icons[subject] || '📖';
+    return icons[subject] || "📖";
   };
 
   const getStandardLevel = (standard: string) => {
-    const level = parseInt(standard.replace('Grade ', ''));
-    if (level <= 8) return { color: 'bg-green-100 text-green-800', label: 'Elementary' };
-    if (level <= 10) return { color: 'bg-blue-100 text-blue-800', label: 'Middle School' };
-    return { color: 'bg-purple-100 text-purple-800', label: 'High School' };
+    const level = parseInt(standard.replace("Grade ", ""));
+    if (level <= 8)
+      return { color: "bg-green-100 text-green-800", label: "Elementary" };
+    if (level <= 10)
+      return { color: "bg-blue-100 text-blue-800", label: "Middle School" };
+    return { color: "bg-purple-100 text-purple-800", label: "High School" };
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Easy': return 'bg-green-100 text-green-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'Hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "Easy":
+        return "bg-green-100 text-green-800";
+      case "Medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "Hard":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getDifficultyDescription = (difficulty: string) => {
     switch (difficulty) {
-      case 'Easy': return 'Basic concepts and fundamental understanding';
-      case 'Medium': return 'Intermediate concepts with some complexity';
-      case 'Hard': return 'Advanced concepts and challenging problems';
-      default: return '';
+      case "Easy":
+        return "Basic concepts and fundamental understanding";
+      case "Medium":
+        return "Intermediate concepts with some complexity";
+      case "Hard":
+        return "Advanced concepts and challenging problems";
+      default:
+        return "";
     }
   };
 
@@ -73,7 +102,9 @@ const SelectQuiz: React.FC = () => {
           <Sparkles className="w-8 h-8 text-indigo-600" />
           Select Your Quiz
         </h1>
-        <p className="text-gray-600">Choose your grade level, subject, and difficulty to get started</p>
+        <p className="text-gray-600">
+          Choose your grade level, subject, and difficulty to get started
+        </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -89,7 +120,10 @@ const SelectQuiz: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Select value={selectedStandard} onValueChange={setSelectedStandard}>
+            <Select
+              value={selectedStandard}
+              onValueChange={setSelectedStandard}
+            >
               <SelectTrigger className="h-12 text-left">
                 <SelectValue placeholder="Choose your grade level" />
               </SelectTrigger>
@@ -154,7 +188,8 @@ const SelectQuiz: React.FC = () => {
             {selectedSubject && (
               <div className="mt-4 p-3 bg-purple-50 rounded-lg">
                 <p className="text-sm text-purple-700">
-                  <strong>Selected:</strong> {selectedSubject} {getSubjectIcon(selectedSubject)}
+                  <strong>Selected:</strong> {selectedSubject}{" "}
+                  {getSubjectIcon(selectedSubject)}
                 </p>
                 <p className="text-xs text-purple-600 mt-1">
                   AI-generated questions tailored to your level
@@ -171,12 +206,13 @@ const SelectQuiz: React.FC = () => {
               <Target className="w-5 h-5 text-orange-600" />
               Select Difficulty
             </CardTitle>
-            <CardDescription>
-              Choose your challenge level
-            </CardDescription>
+            <CardDescription>Choose your challenge level</CardDescription>
           </CardHeader>
           <CardContent>
-            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+            <Select
+              value={selectedDifficulty}
+              onValueChange={setSelectedDifficulty}
+            >
               <SelectTrigger className="h-12 text-left">
                 <SelectValue placeholder="Choose difficulty level" />
               </SelectTrigger>
@@ -224,7 +260,10 @@ const SelectQuiz: React.FC = () => {
                 </Badge>
               </div>
               <p className="text-gray-600 mb-4">
-                You'll get 5 multiple-choice questions about <strong>{selectedSubject}</strong> at <strong>{selectedStandard}</strong> level with <strong>{selectedDifficulty.toLowerCase()}</strong> difficulty
+                You'll get 5 multiple-choice questions about{" "}
+                <strong>{selectedSubject}</strong> at{" "}
+                <strong>{selectedStandard}</strong> level with{" "}
+                <strong>{selectedDifficulty.toLowerCase()}</strong> difficulty
               </p>
               <div className="flex items-center justify-center gap-4 text-sm text-gray-500 mb-6">
                 <div className="flex items-center gap-1">
@@ -240,7 +279,7 @@ const SelectQuiz: React.FC = () => {
                   <span>~5 minutes</span>
                 </div>
               </div>
-              <Button 
+              <Button
                 onClick={handleStartQuiz}
                 size="lg"
                 className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-4"
@@ -264,21 +303,29 @@ const SelectQuiz: React.FC = () => {
               <Badge className="bg-green-100 text-green-800 mt-1">Easy</Badge>
               <div>
                 <p className="font-medium">Foundation Level</p>
-                <p className="text-gray-600">Basic concepts and straightforward questions</p>
+                <p className="text-gray-600">
+                  Basic concepts and straightforward questions
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Badge className="bg-yellow-100 text-yellow-800 mt-1">Medium</Badge>
+              <Badge className="bg-yellow-100 text-yellow-800 mt-1">
+                Medium
+              </Badge>
               <div>
                 <p className="font-medium">Intermediate Level</p>
-                <p className="text-gray-600">Applied knowledge and moderate complexity</p>
+                <p className="text-gray-600">
+                  Applied knowledge and moderate complexity
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Badge className="bg-red-100 text-red-800 mt-1">Hard</Badge>
               <div>
                 <p className="font-medium">Advanced Level</p>
-                <p className="text-gray-600">Complex problems and critical thinking</p>
+                <p className="text-gray-600">
+                  Complex problems and critical thinking
+                </p>
               </div>
             </div>
           </div>

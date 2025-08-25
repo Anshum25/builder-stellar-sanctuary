@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 export interface User {
   uid: string;
@@ -19,7 +19,11 @@ export interface QuizResult {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, displayName?: string) => Promise<void>;
+  signup: (
+    email: string,
+    password: string,
+    displayName?: string,
+  ) => Promise<void>;
   logout: () => void;
   loading: boolean;
 }
@@ -29,7 +33,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -44,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check for stored user session
-    const storedUser = localStorage.getItem('quizapp_user');
+    const storedUser = localStorage.getItem("quizapp_user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -56,17 +60,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       // Mock authentication - replace with Firebase Auth
       if (password.length < 6) {
-        throw new Error('Password should be at least 6 characters');
+        throw new Error("Password should be at least 6 characters");
       }
-      
+
       const mockUser: User = {
         uid: `user_${Date.now()}`,
         email,
-        displayName: email.split('@')[0]
+        displayName: email.split("@")[0],
       };
-      
+
       setUser(mockUser);
-      localStorage.setItem('quizapp_user', JSON.stringify(mockUser));
+      localStorage.setItem("quizapp_user", JSON.stringify(mockUser));
     } catch (error) {
       throw error;
     } finally {
@@ -74,22 +78,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signup = async (email: string, password: string, displayName?: string) => {
+  const signup = async (
+    email: string,
+    password: string,
+    displayName?: string,
+  ) => {
     setLoading(true);
     try {
       // Mock authentication - replace with Firebase Auth
       if (password.length < 6) {
-        throw new Error('Password should be at least 6 characters');
+        throw new Error("Password should be at least 6 characters");
       }
-      
+
       const mockUser: User = {
         uid: `user_${Date.now()}`,
         email,
-        displayName: displayName || email.split('@')[0]
+        displayName: displayName || email.split("@")[0],
       };
-      
+
       setUser(mockUser);
-      localStorage.setItem('quizapp_user', JSON.stringify(mockUser));
+      localStorage.setItem("quizapp_user", JSON.stringify(mockUser));
     } catch (error) {
       throw error;
     } finally {
@@ -99,7 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('quizapp_user');
+    localStorage.removeItem("quizapp_user");
   };
 
   const value = {
@@ -107,7 +115,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     signup,
     logout,
-    loading
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

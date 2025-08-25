@@ -1,8 +1,8 @@
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { LogOut, Brain, User, BarChart3 } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { LogOut, Brain, User, BarChart3 } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,12 +15,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-    { path: '/select-quiz', label: 'Take Quiz', icon: Brain },
+    { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
+    { path: "/select-quiz", label: "Take Quiz", icon: Brain },
   ];
 
   return (
@@ -47,8 +47,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   onClick={() => navigate(path)}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     location.pathname === path
-                      ? 'bg-indigo-100 text-indigo-700'
-                      : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
+                      ? "bg-indigo-100 text-indigo-700"
+                      : "text-gray-600 hover:text-indigo-600 hover:bg-indigo-50"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -61,11 +61,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <User className="w-4 h-4" />
-                <span className="hidden sm:inline">{user?.displayName || user?.email}</span>
+                <span className="hidden sm:inline">
+                  {user?.displayName || user?.email}
+                </span>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleLogout}
                 className="text-gray-600 hover:text-red-600"
               >
@@ -87,8 +89,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 onClick={() => navigate(path)}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   location.pathname === path
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
+                    ? "bg-indigo-100 text-indigo-700"
+                    : "text-gray-600 hover:text-indigo-600 hover:bg-indigo-50"
                 }`}
               >
                 <Icon className="w-4 h-4" />

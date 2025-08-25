@@ -49,28 +49,24 @@ export interface FeedbackResponse {
 }
 
 export const STANDARDS = [
-  'Grade 6',
-  'Grade 7', 
-  'Grade 8',
-  'Grade 9',
-  'Grade 10',
-  'Grade 11',
-  'Grade 12'
+  "Grade 6",
+  "Grade 7",
+  "Grade 8",
+  "Grade 9",
+  "Grade 10",
+  "Grade 11",
+  "Grade 12",
 ];
 
 export const SUBJECTS = [
-  'Mathematics',
-  'Science', 
-  'English',
-  'History',
-  'Geography',
-  'Physics',
-  'Chemistry',
-  'Biology'
+  "Mathematics",
+  "Science",
+  "English",
+  "History",
+  "Geography",
+  "Physics",
+  "Chemistry",
+  "Biology",
 ];
 
-export const DIFFICULTY_LEVELS = [
-  'Easy',
-  'Medium',
-  'Hard'
-];
+export const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard"];

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Brain, Home, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Brain, Home, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
@@ -22,24 +22,27 @@ const NotFound: React.FC = () => {
         {/* Error Content */}
         <div className="mb-8">
           <h2 className="text-6xl font-bold text-gray-300 mb-4">404</h2>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Page Not Found</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            Page Not Found
+          </h3>
           <p className="text-gray-600">
-            Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+            Oops! The page you're looking for doesn't exist. It might have been
+            moved or deleted.
           </p>
         </div>
 
         {/* Action Buttons */}
         <div className="space-y-3">
-          <Button 
-            onClick={() => navigate('/dashboard')}
+          <Button
+            onClick={() => navigate("/dashboard")}
             size="lg"
             className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
           >
             <Home className="w-5 h-5 mr-2" />
             Back to Dashboard
           </Button>
-          
-          <Button 
+
+          <Button
             onClick={() => navigate(-1)}
             variant="outline"
             size="lg"
